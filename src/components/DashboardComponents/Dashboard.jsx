@@ -56,6 +56,10 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/");
+      return;
+    }
     checkUser();
   }, [isAuthenticated]);
 
@@ -126,7 +130,7 @@ export default function DashboardPage() {
                   </div>
                 </>
               ) : (
-                <>{router.push("/404")}</>
+                <></>
               )}
             </div>
           </div>
