@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { AuthContext } from "../../context/authContext";
 import { useRouter } from "next/navigation";
 import { showToast } from "../Extra/ToastMessage";
@@ -35,6 +36,7 @@ const diasSemana = [
 export default function RecordatoriosPage() {
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [medicamentos, setMedicamentos] = useState([]);
   const [recordatorios, setRecordatorios] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -61,6 +63,26 @@ export default function RecordatoriosPage() {
     getMedicineData();
     getRemindersData();
   }, [isAuthenticated]);
+
+  // Efecto para detectar medicineId en la URL y abrir formulario
+  useEffect(() => {
+    const medicineId = searchParams.get("medicineId");
+    if (medicineId && medicamentos.length > 0) {
+      // Verificar que la medicina existe
+      const medicineExists = medicamentos.find((m) => m._id === medicineId);
+      if (medicineExists) {
+        setFormulario((prev) => ({
+          ...prev,
+          medicationId: medicineId,
+        }));
+        setMostrarFormulario(true);
+        showToast(
+          `Creando recordatorio para ${medicineExists.name}`,
+          "success"
+        );
+      }
+    }
+  }, [searchParams, medicamentos]);
 
   //#region API Calls
   const getMedicineData = async () => {
@@ -431,6 +453,21 @@ export default function RecordatoriosPage() {
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Indicador cuando viene desde drag and drop */}
+              {searchParams.get("medicineId") && formulario.medicationId && (
+                <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-4 flex items-center gap-3">
+                  <Bell className="w-6 h-6 text-primary" />
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">
+                      Medicamento preseleccionado
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {medicamentos.find((m) => m._id === formulario.medicationId)?.name}
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <div>
                 <label
                   htmlFor="medicamento"
