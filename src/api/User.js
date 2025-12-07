@@ -21,3 +21,24 @@ export const GetUserData = async () => {
     };
   }
 };
+
+//Update User Notification Preference
+export const UpdateNotificationPreference = async (data) => {
+  try {
+    const res = await instance.patch(
+      "/user",
+      { notificationPreference: data },
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (error) {
+    return {
+      error:
+        error.response?.data?.message ||
+        "Error al actualizar la informacion del usuario",
+      status: error.response?.status,
+    };
+  }
+};

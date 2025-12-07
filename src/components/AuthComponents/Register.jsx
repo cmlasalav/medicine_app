@@ -14,10 +14,15 @@ export default function RegistroPage() {
     name: "",
     email: "",
     phone: "",
+    notificationPreference: "",
     password: "",
     confirmPassword: "",
   });
   const [phoneValue, setPhoneValue] = useState("");
+  const [notificationPreferences, setNotificationPreferences] = useState({
+    email: false,
+    whatsapp: false,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -37,6 +42,21 @@ export default function RegistroPage() {
     }
   };
 
+  const handleNotificationChange = (type) => {
+    setNotificationPreferences((prev) => ({
+      ...prev,
+      [type]: !prev[type],
+    }));
+  };
+
+  const getNotificationPreference = () => {
+    const { email, whatsapp } = notificationPreferences;
+    if (email && whatsapp) return "both";
+    if (email) return "email";
+    if (whatsapp) return "whatsapp";
+    return "";
+  };
+
   const validateForm = (formData, setError) => {
     // Validar campos vacíos
     if (
@@ -46,6 +66,18 @@ export default function RegistroPage() {
       !formData.confirmPassword
     ) {
       setError("Por favor completa todos los campos");
+      return false;
+    }
+
+    // Validar que al menos una opción de notificación esté seleccionada
+    if (!notificationPreferences.email && !notificationPreferences.whatsapp) {
+      setError("Por favor selecciona al menos un método de notificación");
+      return false;
+    }
+
+    // Validar teléfono si WhatsApp está seleccionado
+    if (notificationPreferences.whatsapp && !phoneValue) {
+      setError("Por favor ingresa tu número de teléfono para WhatsApp");
       return false;
     }
 
@@ -82,15 +114,24 @@ export default function RegistroPage() {
     setIsLoading(true);
     try {
       // Preparar datos con teléfono limpio (sin guiones, espacios, ni caracteres especiales)
-      const cleanPhone = phoneValue.replace(/[^0-9]/g, "");
+      const notificationPreference = getNotificationPreference();
       const dataToSend = {
-        ...formData,
-        phone: `+${cleanPhone}`,
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        notificationPreference,
       };
+
+      // Solo agregar teléfono si WhatsApp está seleccionado
+      if (notificationPreferences.whatsapp && phoneValue) {
+        const cleanPhone = phoneValue.replace(/[^0-9]/g, "");
+        dataToSend.phone = `+${cleanPhone}`;
+      }
+
       console.log(dataToSend);
       const response = await RegisterUser(dataToSend);
       if (response.error) {
-        setError("Este correo ya está registrado.");
+        setError(response.error ||"Este correo ya está registrado.");
         setIsLoading(false);
         return;
       }
@@ -210,37 +251,108 @@ export default function RegistroPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label
-                htmlFor="phone"
-                className="block text-base font-medium text-foreground"
-              >
-                Número de Teléfono
+              <label className="block text-base font-medium text-foreground mb-3">
+                Preferencia de Notificaciones *
               </label>
-              <PhoneInput
-                country={"cr"}
-                value={phoneValue}
-                onChange={(phone) => {
-                  setPhoneValue(phone);
-                  setFormData((prev) => ({
-                    ...prev,
-                    phone: phone,
-                  }));
-                }}
-                inputProps={{
-                  name: "phone",
-                  required: true,
-                  id: "phone",
-                }}
-                containerClass="phone-input-container"
-                inputClass="w-full h-11 text-base px-3 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
-                buttonClass="bg-muted border-input hover:bg-muted/80"
-                dropdownClass="bg-card border-border text-foreground"
-                searchClass="bg-background text-foreground border-input"
-                enableSearch
-                searchPlaceholder="Buscar país..."
-                countryCodeEditable={false}
-              />
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer group flex-1">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      checked={notificationPreferences.email}
+                      onChange={() => handleNotificationChange("email")}
+                      className="peer sr-only"
+                    />
+                    <div className="w-6 h-6 border-2 border-input rounded-md bg-background peer-checked:bg-primary peer-checked:border-primary transition-all duration-200 flex items-center justify-center">
+                      {notificationPreferences.email && (
+                        <svg
+                          className="w-4 h-4 text-primary-foreground"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={3}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-base text-foreground group-hover:text-primary transition-colors">
+                    Email
+                  </span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer group flex-1">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      checked={notificationPreferences.whatsapp}
+                      onChange={() => handleNotificationChange("whatsapp")}
+                      className="peer sr-only"
+                    />
+                    <div className="w-6 h-6 border-2 border-input rounded-md bg-background peer-checked:bg-primary peer-checked:border-primary transition-all duration-200 flex items-center justify-center">
+                      {notificationPreferences.whatsapp && (
+                        <svg
+                          className="w-4 h-4 text-primary-foreground"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={3}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-base text-foreground group-hover:text-primary transition-colors">
+                    WhatsApp
+                  </span>
+                </label>
+              </div>
             </div>
+
+            {notificationPreferences.whatsapp && (
+              <div className="space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-300">
+                <label
+                  htmlFor="phone"
+                  className="block text-base font-medium text-foreground"
+                >
+                  Número de Teléfono (WhatsApp) *
+                </label>
+                <PhoneInput
+                  country={"cr"}
+                  value={phoneValue}
+                  onChange={(phone) => {
+                    setPhoneValue(phone);
+                    setFormData((prev) => ({
+                      ...prev,
+                      phone: phone,
+                    }));
+                  }}
+                  inputProps={{
+                    name: "phone",
+                    required: notificationPreferences.whatsapp,
+                    id: "phone",
+                  }}
+                  containerClass="phone-input-container"
+                  inputClass="w-full h-11 text-base px-3 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                  buttonClass="bg-muted border-input hover:bg-muted/80"
+                  dropdownClass="bg-card border-border text-foreground"
+                  searchClass="bg-background text-foreground border-input"
+                  enableSearch
+                  searchPlaceholder="Buscar país..."
+                  countryCodeEditable={false}
+                />
+              </div>
+            )}
 
             <div className="space-y-1.5">
               <label
