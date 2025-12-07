@@ -5,15 +5,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Pill } from "lucide-react";
 import { RegisterUser } from "@/api/Auth";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 export default function RegistroPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
+  const [phoneValue, setPhoneValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -77,11 +81,16 @@ export default function RegistroPage() {
     }
     setIsLoading(true);
     try {
-      //Register
-      console.log(formData)
-      const response = await RegisterUser(formData);
+      // Preparar datos con teléfono limpio (sin guiones, espacios, ni caracteres especiales)
+      const cleanPhone = phoneValue.replace(/[^0-9]/g, "");
+      const dataToSend = {
+        ...formData,
+        phone: cleanPhone,
+      };
+      console.log(dataToSend);
+      const response = await RegisterUser(dataToSend);
       if (response.error) {
-        setError({ email: "Error al registrar el usuario" });
+        setError("Este correo ya está registrado.");
         setIsLoading(false);
         return;
       }
@@ -92,7 +101,7 @@ export default function RegistroPage() {
         router.push("/login");
       }, 2000);
     } catch (error) {
-      setError({ email: "Error al registrar el usuario" });
+      setError("Error al registrar el usuario");
       setIsLoading(false);
     }
   };
@@ -135,37 +144,37 @@ export default function RegistroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/10 flex items-center justify-center p-2">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/10 flex items-center justify-center p-4 py-8">
       <div className="w-full max-w-md">
-        <div className="text-center mb-2">
-          <Link href="/" className="inline-flex items-center gap-3 mb-6">
-            <div className="bg-primary text-primary-foreground p-3 rounded-2xl">
-              <Pill className="w-10 h-10" />
+        <div className="text-center mb-4">
+          <Link href="/" className="inline-flex items-center gap-2 mb-4">
+            <div className="bg-primary text-primary-foreground p-2 rounded-xl">
+              <Pill className="w-8 h-8" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-2xl font-bold text-foreground">
               Pastillero Virtual
             </h1>
           </Link>
-          <h2 className="text-2xl font-semibold text-foreground mt-0">
+          <h2 className="text-xl font-semibold text-foreground mt-0">
             Crear Cuenta
           </h2>
-          <p className="text-lg text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Comienza a gestionar tus medicamentos
           </p>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-8 shadow-xl">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-card border border-border rounded-lg p-6 shadow-xl">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-destructive/10 border-2 border-destructive text-destructive px-6 py-4 rounded-lg text-lg">
+              <div className="bg-destructive/10 border border-destructive text-destructive px-4 py-3 rounded-lg text-base">
                 {error}
               </div>
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               <label
                 htmlFor="name"
-                className="block text-xl font-medium text-foreground"
+                className="block text-base font-medium text-foreground"
               >
                 Nombre Completo
               </label>
@@ -176,15 +185,15 @@ export default function RegistroPage() {
                 placeholder="Juan Pérez"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full h-14 text-lg px-4 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                className="w-full h-11 text-base px-3 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                 required
               />
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               <label
                 htmlFor="email"
-                className="block text-xl font-medium text-foreground"
+                className="block text-base font-medium text-foreground"
               >
                 Correo Electrónico
               </label>
@@ -195,15 +204,48 @@ export default function RegistroPage() {
                 placeholder="tu@email.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full h-14 text-lg px-4 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                className="w-full h-11 text-base px-3 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                 required
               />
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-1.5">
+              <label
+                htmlFor="phone"
+                className="block text-base font-medium text-foreground"
+              >
+                Número de Teléfono
+              </label>
+              <PhoneInput
+                country={"cr"}
+                value={phoneValue}
+                onChange={(phone) => {
+                  setPhoneValue(phone);
+                  setFormData((prev) => ({
+                    ...prev,
+                    phone: phone,
+                  }));
+                }}
+                inputProps={{
+                  name: "phone",
+                  required: true,
+                  id: "phone",
+                }}
+                containerClass="phone-input-container"
+                inputClass="w-full h-11 text-base px-3 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                buttonClass="bg-muted border-input hover:bg-muted/80"
+                dropdownClass="bg-card border-border text-foreground"
+                searchClass="bg-background text-foreground border-input"
+                enableSearch
+                searchPlaceholder="Buscar país..."
+                countryCodeEditable={false}
+              />
+            </div>
+
+            <div className="space-y-1.5">
               <label
                 htmlFor="password"
-                className="block text-xl font-medium text-foreground"
+                className="block text-base font-medium text-foreground"
               >
                 Contraseña
               </label>
@@ -214,15 +256,15 @@ export default function RegistroPage() {
                 placeholder="Mínimo 6 caracteres"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full h-14 text-lg px-4 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                className="w-full h-11 text-base px-3 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                 required
               />
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               <label
                 htmlFor="confirmPassword"
-                className="block text-xl font-medium text-foreground"
+                className="block text-base font-medium text-foreground"
               >
                 Confirmar Contraseña
               </label>
@@ -233,7 +275,7 @@ export default function RegistroPage() {
                 placeholder="Repite tu contraseña"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full h-14 text-lg px-4 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                className="w-full h-11 text-base px-3 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                 required
               />
             </div>
@@ -241,14 +283,14 @@ export default function RegistroPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-14 text-xl font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full h-12 text-lg font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             >
               {isLoading ? "Creando cuenta..." : "Crear Cuenta"}
             </button>
           </form>
 
-          <div className="mt-8 text-center">
-            <p className="text-lg text-muted-foreground">
+          <div className="mt-6 text-center">
+            <p className="text-base text-muted-foreground">
               ¿Ya tienes cuenta?{" "}
               <Link
                 href="/login"
