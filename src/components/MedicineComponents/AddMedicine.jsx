@@ -3,11 +3,20 @@ import { useEffect, useState, useContext, useReducer } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Pill, Plus, Trash2, Edit2, ArrowLeft } from "lucide-react";
+import { Pill, Plus, Trash2, Edit2, ArrowLeft, GripVertical } from "lucide-react";
 import { GetMedicines, PostMedicines, PutMedicines } from "../../api/Medicine";
 import { showToast } from "../Extra/ToastMessage";
 import Loader from "../Extra/Loader";
 import { formattedDate, formatForInput } from "@/components/utils/utils";
+import {
+  handleDragStart as utilHandleDragStart,
+  handleDragEnd as utilHandleDragEnd,
+  handleDragOver as utilHandleDragOver,
+  handleDragLeave as utilHandleDragLeave,
+  handleDrop as utilHandleDrop,
+  getDraggableClasses,
+  getDropZoneClasses,
+} from "@/components/utils/dragDrop";
 
 export default function MedicamentosPage() {
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
@@ -21,6 +30,8 @@ export default function MedicamentosPage() {
     expiration_date: "",
   });
   const [loading, setLoading] = useState(false);
+  const [draggedMedicine, setDraggedMedicine] = useState(null);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   const getMedicineData = async () => {
     if (isAuthenticated) {
@@ -149,9 +160,40 @@ export default function MedicamentosPage() {
     setMostrarFormulario(true);
   };
 
-  const handleGoToReminders = () => {
-    router.push("/reminders");
+  const handleGoToReminders = (medicineId = null) => {
+    if (medicineId) {
+      router.push(`/reminders?medicineId=${medicineId}`);
+    } else {
+      router.push("/reminders");
+    }
   };
+
+  //#region Drag and Drop Handlers
+  const handleDragStart = (e, medicamento) => {
+    utilHandleDragStart(e, medicamento, setDraggedMedicine);
+  };
+
+  const handleDragEnd = () => {
+    utilHandleDragEnd(setDraggedMedicine, setIsDraggingOver);
+  };
+
+  const handleDragOver = (e) => {
+    utilHandleDragOver(e, setIsDraggingOver);
+  };
+
+  const handleDragLeave = (e) => {
+    utilHandleDragLeave(e, setIsDraggingOver);
+  };
+
+  const handleDrop = (e) => {
+    utilHandleDrop(
+      e,
+      (medicineId) => handleGoToReminders(medicineId),
+      setIsDraggingOver,
+      setDraggedMedicine
+    );
+  };
+  //#endregion
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/10">
@@ -355,12 +397,33 @@ export default function MedicamentosPage() {
               </p>
             </div>
           ) : (
-            medicamentos.map((medicamento) => (
+            <>
+              {/* Instrucciones de drag and drop */}
+              <div className="bg-accent/10 border border-accent/30 rounded-xl p-4 mb-4">
+                <p className="text-sm text-foreground">
+                  <span className="font-semibold">💡 Tip:</span> Arrastra cualquier medicina al botón 
+                  "Crear Recordatorios" para crear un recordatorio automáticamente
+                </p>
+              </div>
+              
+              {medicamentos.map((medicamento) => (
               <div
                 key={medicamento._id}
-                className="bg-card border-2 border-border rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+                draggable
+                onDragStart={(e) => handleDragStart(e, medicamento)}
+                onDragEnd={handleDragEnd}
+                className={getDraggableClasses(
+                  draggedMedicine,
+                  medicamento,
+                  "bg-card border-2 border-border rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+                )}
               >
                 <div className="flex items-start justify-between">
+                  {/* Drag Handle Indicator */}
+                  <div className="flex items-center mr-2 text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+                    <GripVertical className="w-6 h-6" />
+                  </div>
+
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="bg-primary/10 p-2 rounded-lg">
@@ -384,6 +447,7 @@ export default function MedicamentosPage() {
                   <div className="flex gap-2 ml-4">
                     <button
                       onClick={() => handleEditar(medicamento)}
+                      onMouseDown={(e) => e.stopPropagation()}
                       className="bg-secondary text-secondary-foreground p-3 rounded-lg hover:bg-secondary/80 transition-all duration-300"
                       aria-label="Editar medicamento"
                     >
@@ -399,19 +463,47 @@ export default function MedicamentosPage() {
                   </div>
                 </div>
               </div>
-            ))
+            ))}
+            </>
           )}
         </div>
 
-        {/* Link a Recordatorios */}
+        {/* Link a Recordatorios con Drop Zone */}
         {medicamentos.length > 0 && (
           <div className="mt-8 text-center">
-            <button
-              onClick={handleGoToReminders}
-              className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl"
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={getDropZoneClasses(
+                isDraggingOver,
+                "inline-block transition-all duration-300",
+                "inline-block transition-all duration-300 scale-110"
+              )}
             >
-              Crear Recordatorios
-            </button>
+              <button
+                onClick={() => handleGoToReminders()}
+                className={getDropZoneClasses(
+                  isDraggingOver,
+                  "inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl",
+                  "inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ring-4 ring-primary/50 scale-105"
+                )}
+              >
+                {isDraggingOver ? (
+                  <>
+                    <Plus className="w-6 h-6 animate-pulse" />
+                    Suelta aquí para crear recordatorio
+                  </>
+                ) : (
+                  <>Crear Recordatorios</>
+                )}
+              </button>
+            </div>
+            {draggedMedicine && (
+              <p className="text-sm text-muted-foreground mt-4 animate-pulse">
+                Arrastra "{draggedMedicine.name}" al botón para crear un recordatorio
+              </p>
+            )}
           </div>
         )}
       </div>
