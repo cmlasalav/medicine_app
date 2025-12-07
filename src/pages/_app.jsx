@@ -5,6 +5,7 @@ import { ToastProvider } from "../components/Extra/ToastMessage";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import LoadingScreen from "../components/Extra/Loader";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -50,11 +51,17 @@ function MyApp({ Component, pageProps }) {
   }, [router]);
 
   return (
-    <AuthProvider>
-      <ToastProvider />
-      {loading && <LoadingScreen message="Cargando página..." />}
-      <Component {...pageProps} />
-    </AuthProvider>
+    <>
+      <Head>
+        <title>Pastillero Virtual</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <AuthProvider>
+        <ToastProvider />
+        {loading && <LoadingScreen message="Cargando página..." />}
+        <Component {...pageProps} />
+      </AuthProvider>
+    </>
   );
 }
 
