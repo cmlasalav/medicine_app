@@ -57,7 +57,7 @@ export default function MedicamentosPage() {
     console.log(nuevoMedicamento);
     try {
       const response = await PostMedicines(nuevoMedicamento);
-      console.log("Respuesta del backend:", response);
+      // console.log("Respuesta del backend:", response);
       if (response.error) {
         if (response.status === 401) {
           showToast(
