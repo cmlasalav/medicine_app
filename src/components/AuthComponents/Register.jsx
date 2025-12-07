@@ -85,7 +85,7 @@ export default function RegistroPage() {
       const cleanPhone = phoneValue.replace(/[^0-9]/g, "");
       const dataToSend = {
         ...formData,
-        phone: cleanPhone,
+        phone: `+${cleanPhone}`,
       };
       console.log(dataToSend);
       const response = await RegisterUser(dataToSend);
