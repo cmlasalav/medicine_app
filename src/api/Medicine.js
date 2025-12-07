@@ -44,7 +44,6 @@ export const PostMedicines = async (medicineData) => {
 
 //Put Medicines
 export const PutMedicines = async (medicineData) => {
-  console.log(medicineData);
   try {
     const res = await instance.put(
       `/medicine/${medicineData._id}`,

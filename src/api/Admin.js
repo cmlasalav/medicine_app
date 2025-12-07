@@ -56,7 +56,6 @@ export const UpdateData = async (_id, typeData, data) => {
 
 //Delete Admin Data
 export const DeleteAdminData = async (_id, typeData) => {
-  // console.log("Deleting data:", _id, typeData);
   try {
     const res = await instance.delete(`/token/${_id}?typeData=${typeData}`, {
       withCredentials: true,

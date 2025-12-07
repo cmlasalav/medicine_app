@@ -25,7 +25,6 @@ export default function LoginPage() {
           password,
         };
         const response = await LoginUser(userData);
-        console.log(response);
         if (response.error) {
           setError(response.error);
           setIsLoading(false);

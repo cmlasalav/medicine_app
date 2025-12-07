@@ -30,7 +30,6 @@ export default function LogsPage() {
       const adminData = await GetAdminLogs();
       if (!adminData.error) {
         setLogs(adminData);
-        // console.log(adminData);
       } else {
         showToast(adminData.error || "Desconocido", "error");
       }

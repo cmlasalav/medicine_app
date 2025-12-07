@@ -48,7 +48,6 @@ export default function DashboardPage() {
   const getUserData = async () => {
     const data = await GetUserData();
     if (data) {
-      console.log(data);
       setUserName(data.userName);
       setMedicamentos(data.medicines);
       setReminders(data.reminders);

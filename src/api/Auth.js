@@ -13,7 +13,6 @@ export const RegisterUser = async (userData) => {
     const res = await instance.post("/auth", userData);
     return res.data;
   } catch (error) {
-    // console.log("Error in RegisterUser:", error);
     return {
       error: error.response?.data?.message || "Error al Registrarse",
     };
@@ -26,7 +25,6 @@ export const LoginUser = async (userData) => {
     const res = await instance.post("auth/login", userData, {
       withCredentials: true,
     });
-    // console.log("Response from LoginUser:", res.error);
     return res.data;
   } catch (error) {
     // console.error("Error in LoginUser:", error);

@@ -19,7 +19,6 @@ export default function EditUserStatusModal({ isOpen, onClose, user, onSave }) {
     const updatedUser = { ...user, userStatus: newStatus };
 
     const response = await UpdateData(updatedUser._id, "Users", updatedUser);
-    // console.log(response);
     if (response.ok) {
       showToast(response.message || "Desconocido", "success");
       setTimeout(() => {

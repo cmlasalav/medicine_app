@@ -128,7 +128,6 @@ export default function RegistroPage() {
         dataToSend.phone = `+${cleanPhone}`;
       }
 
-      console.log(dataToSend);
       const response = await RegisterUser(dataToSend);
       if (response.error) {
         setError(response.error ||"Este correo ya está registrado.");

@@ -38,7 +38,6 @@ export default function MedicamentosPage() {
       try {
         const response = await GetMedicines();
         if (response) {
-          console.log(response);
           setMedicamentos(response);
         } else {
           showToast(
@@ -65,10 +64,8 @@ export default function MedicamentosPage() {
 
   //#region Funciones para editar y agregar medicamentos
   const postMedicines = async (nuevoMedicamento) => {
-    console.log(nuevoMedicamento);
     try {
       const response = await PostMedicines(nuevoMedicamento);
-      // console.log("Respuesta del backend:", response);
       if (response.error) {
         if (response.status === 401) {
           showToast(
@@ -94,7 +91,6 @@ export default function MedicamentosPage() {
   const editMedicines = async (editMedicine) => {
     try {
       const response = await PutMedicines(editMedicine);
-      console.log("Respuesta del backend:", response);
       if (response.error) {
         if (response.status === 401) {
           showToast(

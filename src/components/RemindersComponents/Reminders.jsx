@@ -103,7 +103,6 @@ export default function RecordatoriosPage() {
       try {
         const response = await GetMedicines();
         if (response) {
-          console.log(response);
           setMedicamentos(response);
         } else {
           showToast(
@@ -129,7 +128,6 @@ export default function RecordatoriosPage() {
       try {
         const response = await GetTreatments();
         if (response) {
-          console.log(response);
           setRecordatorios(response);
         } else {
           showToast(
@@ -153,7 +151,6 @@ export default function RecordatoriosPage() {
 
   //#region API Actions
   const editReminder = async (editando) => {
-    console.log("Editing reminder:", formulario, editando);
     try {
       const response = await PatchTreatment(formulario, editando);
       if (response.error) {
@@ -190,7 +187,6 @@ export default function RecordatoriosPage() {
   const postReminder = async () => {
     try {
       const response = await PostTreatment(formulario);
-      console.log("Nuevo recordatorio creado:", response);
       if (response.error) {
         if (response.status === 401) {
           showToast(
