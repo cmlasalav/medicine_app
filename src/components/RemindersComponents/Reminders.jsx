@@ -6,8 +6,17 @@ import { useSearchParams } from "next/navigation";
 import { AuthContext } from "../../context/authContext";
 import { useRouter } from "next/navigation";
 import { showToast } from "../Extra/ToastMessage";
-import { Bell, Plus, Trash2, Edit2, ArrowLeft, Clock } from "lucide-react";
+import {
+  Bell,
+  Plus,
+  Trash2,
+  Edit2,
+  ArrowLeft,
+  Clock,
+  Settings,
+} from "lucide-react";
 import { GetMedicines } from "../../api/Medicine";
+import { GetUserData } from "../../api/User";
 import {
   formattedDate,
   getMedicationName,
@@ -22,6 +31,7 @@ import {
   DeleteTreatment,
 } from "../../api/Treatment";
 import DeleteConfirmationModal from "../Modals/ConfirmationModal";
+import NotificationsPreferenceModal from "../Modals/NotificationsPreferenceModal";
 
 const diasSemana = [
   { id: "lun", nombre: "Lun" },
@@ -45,6 +55,8 @@ export default function RecordatoriosPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [reminderToDelete, setReminderToDelete] = useState(null);
   const [deletingReminder, setDeletingReminder] = useState(false);
+  const [showPreferenceModal, setShowPreferenceModal] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [formulario, setFormulario] = useState({
     medicationId: "",
     type_dose: "",
@@ -62,6 +74,7 @@ export default function RecordatoriosPage() {
   useEffect(() => {
     getMedicineData();
     getRemindersData();
+    getUserInfo();
   }, [isAuthenticated]);
 
   // Efecto para detectar medicineId en la URL y abrir formulario
@@ -361,6 +374,36 @@ export default function RecordatoriosPage() {
     setReminderToDelete(null);
   };
 
+  const getUserInfo = async () => {
+    if (isAuthenticated) {
+      try {
+        const response = await GetUserData();
+        if (response && !response.error) {
+          setUserData(response);
+        }
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    }
+  };
+
+  const handleOpenPreferenceModal = () => {
+    if (userData) {
+      setShowPreferenceModal(true);
+    }
+  };
+
+  const handlePreferenceUpdated = (newPreference) => {
+    setUserData((prev) => ({
+      ...prev,
+      notificationPreference: newPreference,
+    }));
+  };
+
+  const handleClosePreferenceModal = () => {
+    setShowPreferenceModal(false);
+  };
+
   const toggleActivo = (id) => {
     setRecordatorios(
       recordatorios.map((rec) =>
@@ -433,15 +476,26 @@ export default function RecordatoriosPage() {
               </div>
             </div>
 
-            {!mostrarFormulario && (
+            <div className="flex gap-3">
               <button
-                onClick={handleNuevo}
-                className="bg-accent text-accent-foreground px-6 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+                onClick={handleOpenPreferenceModal}
+                className="bg-secondary text-secondary-foreground px-4 py-4 rounded-xl text-base font-semibold hover:bg-secondary/90 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+                title="Cambiar preferencia de notificación"
               >
-                <Plus className="w-6 h-6" />
-                Nuevo Recordatorio
+                <Settings className="w-5 h-5" />
+                <span className="hidden sm:inline">Preferencias</span>
               </button>
-            )}
+
+              {!mostrarFormulario && (
+                <button
+                  onClick={handleNuevo}
+                  className="bg-accent text-accent-foreground px-6 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+                >
+                  <Plus className="w-6 h-6" />
+                  Nuevo Recordatorio
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -462,7 +516,11 @@ export default function RecordatoriosPage() {
                       Medicamento preseleccionado
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {medicamentos.find((m) => m._id === formulario.medicationId)?.name}
+                      {
+                        medicamentos.find(
+                          (m) => m._id === formulario.medicationId
+                        )?.name
+                      }
                     </p>
                   </div>
                 </div>
@@ -931,6 +989,16 @@ export default function RecordatoriosPage() {
               : ""
           }
           isLoading={deletingReminder}
+        />
+
+        {/* Notification Preference Modal */}
+        <NotificationsPreferenceModal
+          isOpen={showPreferenceModal}
+          onClose={handleClosePreferenceModal}
+          currentPreference={userData?.notificationPreference}
+          onPreferenceUpdated={handlePreferenceUpdated}
+          setIsAuthenticated={setIsAuthenticated}
+          router={router}
         />
       </div>
     </div>
