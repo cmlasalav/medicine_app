@@ -7,6 +7,7 @@ import Link from "next/link";
 import { AuthContext } from "../../context/authContext";
 import { LogoutUser, UserType } from "@/api/Auth";
 import { GetUserData } from "@/api/User";
+import ProductionInfoModal from "../Modals/ProductionInfoModal";
 import {
   formattedDate,
   getMedicationName,
@@ -32,6 +33,7 @@ export default function DashboardPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [reminders, setReminders] = useState([]);
   const [medicamentos, setMedicamentos] = useState([]);
+  const [showProductionInfo, setShowProductionInfo] = useState(false);
 
   //Admin check
   const checkUser = async () => {
@@ -137,13 +139,48 @@ export default function DashboardPage() {
       </header>
 
       <div className="container mx-auto px-4 py-8 md:py-12">
-        <div className="mb-10">
+        <div className="mb-6 sm:mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
             Hola, {userName || "Carlos"}
           </h2>
           <p className="text-xl text-muted-foreground">
             Aquí está tu pastillero de hoy
           </p>
+        </div>
+
+        {/* Banner Informativo de Producción */}
+        <div className="mb-6 sm:mb-8 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-4 shadow-md">
+          <div className="flex items-start gap-3">
+            <div className="bg-amber-500 p-2 rounded-lg flex-shrink-0">
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm sm:text-base font-bold text-amber-900 mb-1">
+                🚀 Prototipo Educativo
+              </h3>
+              <p className="text-xs sm:text-sm text-amber-800 mb-2">
+                Esta aplicación tiene limitaciones en producción. Las notificaciones por WhatsApp y correo tienen restricciones técnicas.
+              </p>
+              <button
+                onClick={() => setShowProductionInfo(true)}
+                className="text-xs sm:text-sm font-semibold text-amber-700 hover:text-amber-900 underline underline-offset-2 transition-colors"
+              >
+                Leer información importante →
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-10">
@@ -444,6 +481,12 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
+
+        {/* Production Information Modal */}
+        <ProductionInfoModal
+          isOpen={showProductionInfo}
+          onClose={() => setShowProductionInfo(false)}
+        />
       </div>
     </div>
   );
