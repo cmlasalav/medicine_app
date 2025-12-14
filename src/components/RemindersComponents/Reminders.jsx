@@ -450,48 +450,48 @@ export default function RecordatoriosPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/10">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <Link
             href="/medicine"
-            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-4 text-lg"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-4 text-base sm:text-lg"
           >
-            <ArrowLeft className="w-6 h-6" />
+            <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
             Volver a Mis Medicamentos
           </Link>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="bg-accent/20 p-4 rounded-2xl">
-                <Bell className="w-10 h-10 text-accent" />
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="bg-accent/20 p-3 sm:p-4 rounded-2xl">
+                <Bell className="w-8 h-8 sm:w-10 sm:h-10 text-accent" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-foreground">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
                   Mis Recordatorios
                 </h1>
-                <p className="text-xl text-muted-foreground mt-1">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground mt-1">
                   Configura tus alarmas de medicamentos
                 </p>
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleOpenPreferenceModal}
-                className="bg-secondary text-secondary-foreground px-4 py-4 rounded-xl text-base font-semibold hover:bg-secondary/90 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+                className="w-full sm:w-auto bg-secondary text-secondary-foreground px-4 py-3 sm:py-4 rounded-xl text-base font-semibold hover:bg-secondary/90 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                 title="Cambiar preferencia de notificación"
               >
                 <Settings className="w-5 h-5" />
-                <span className="hidden sm:inline">Preferencias</span>
+                Preferencias
               </button>
 
               {!mostrarFormulario && (
                 <button
                   onClick={handleNuevo}
-                  className="bg-accent text-accent-foreground px-6 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+                  className="w-full sm:w-auto bg-accent text-accent-foreground px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:bg-accent/90 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                 >
-                  <Plus className="w-6 h-6" />
+                  <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                   Nuevo Recordatorio
                 </button>
               )}
@@ -501,12 +501,12 @@ export default function RecordatoriosPage() {
 
         {/* Formulario */}
         {mostrarFormulario && (
-          <div className="bg-card border-2 border-border rounded-2xl p-8 mb-8 shadow-lg">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
+          <div className="bg-card border-2 border-border rounded-2xl p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 shadow-lg">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6">
               {editando ? "Editar Recordatorio" : "Nuevo Recordatorio"}
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* Indicador cuando viene desde drag and drop */}
               {searchParams.get("medicineId") && formulario.medicationId && (
                 <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-4 flex items-center gap-3">
@@ -529,7 +529,7 @@ export default function RecordatoriosPage() {
               <div>
                 <label
                   htmlFor="medicamento"
-                  className="block text-lg font-semibold text-foreground mb-2"
+                  className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                 >
                   Medicamento *
                 </label>
@@ -543,7 +543,7 @@ export default function RecordatoriosPage() {
                       medicationId: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
+                  className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
                 >
                   <option value="">Seleccionar medicamento</option>
                   {medicamentos.map((med) => (
@@ -566,7 +566,7 @@ export default function RecordatoriosPage() {
                 <div className="mt-4">
                   <label
                     htmlFor="dose"
-                    className="block text-lg font-semibold text-foreground mb-2"
+                    className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                   >
                     Tipo de Dosis *
                   </label>
@@ -592,7 +592,7 @@ export default function RecordatoriosPage() {
                           newtype_dose === "every_x_hours" ? "" : "",
                       });
                     }}
-                    className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
+                    className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
                   >
                     <option value="">Seleccionar el tipo de dosis</option>
                     <option value="diary">Dosis Diaria</option>
@@ -605,7 +605,7 @@ export default function RecordatoriosPage() {
               <div className="mt-4">
                 <label
                   htmlFor="priority"
-                  className="block text-lg font-semibold text-foreground mb-2"
+                  className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                 >
                   Tipo de Prioridad *
                 </label>
@@ -619,7 +619,7 @@ export default function RecordatoriosPage() {
                       priority: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
+                  className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
                 >
                   <option value="">Seleccionar el tipo de prioridad</option>
                   <option value="high">Prioridad Alta</option>
@@ -632,7 +632,7 @@ export default function RecordatoriosPage() {
               <div className="mt-4">
                 <label
                   htmlFor="quantity_per_dose"
-                  className="block text-lg font-semibold text-foreground mb-2"
+                  className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                 >
                   Cantidad de pastillas *
                 </label>
@@ -650,7 +650,7 @@ export default function RecordatoriosPage() {
                     })
                   }
                   placeholder="Ej: 2"
-                  className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
+                  className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
                 />
                 <p className="text-sm text-muted-foreground mt-2">
                   Ingresa la cantidad de pastillas que debes tomar por dosis
@@ -661,7 +661,7 @@ export default function RecordatoriosPage() {
               <div>
                 <label
                   htmlFor="startDate"
-                  className="block text-lg font-semibold text-foreground mb-2"
+                  className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                 >
                   Fecha de inicio *
                 </label>
@@ -673,14 +673,14 @@ export default function RecordatoriosPage() {
                   onChange={(e) =>
                     setFormulario({ ...formulario, startDate: e.target.value })
                   }
-                  className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
+                  className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
                 />
               </div>
               {/* End Date */}
               <div>
                 <label
                   htmlFor="endDate"
-                  className="block text-lg font-semibold text-foreground mb-2"
+                  className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                 >
                   Fecha de fin
                 </label>
@@ -692,7 +692,7 @@ export default function RecordatoriosPage() {
                   onChange={(e) =>
                     setFormulario({ ...formulario, endDate: e.target.value })
                   }
-                  className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
+                  className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
                 />
                 <p className="text-sm text-muted-foreground mt-2">
                   Opcional - Deja vacío para recordatorio sin fecha de fin
@@ -706,12 +706,12 @@ export default function RecordatoriosPage() {
               <div>
                 <label
                   htmlFor="hora"
-                  className="block text-lg font-semibold text-foreground mb-2"
+                  className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                 >
                   Hora del Recordatorio *
                 </label>
                 <div className="relative">
-                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Clock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
                   <input
                     type="time"
                     id="hora"
@@ -723,7 +723,7 @@ export default function RecordatoriosPage() {
                         startHour: e.target.value,
                       })
                     }
-                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
+                    className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
                   />
                 </div>
               </div>
@@ -733,7 +733,7 @@ export default function RecordatoriosPage() {
                 <div>
                   <label
                     htmlFor="interval_hour"
-                    className="block text-lg font-semibold text-foreground mb-2"
+                    className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                   >
                     Cada cuántas horas *
                   </label>
@@ -751,7 +751,7 @@ export default function RecordatoriosPage() {
                       })
                     }
                     placeholder="Ej: 8 (cada 8 horas)"
-                    className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
+                    className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all bg-background text-foreground"
                   />
                   <p className="text-sm text-muted-foreground mt-2">
                     Especifica cada cuántas horas debes tomar el medicamento
@@ -761,23 +761,23 @@ export default function RecordatoriosPage() {
               )}
 
               <div>
-                <label className="block text-lg font-semibold text-foreground mb-3">
+                <label className="block text-base sm:text-lg font-semibold text-foreground mb-3">
                   {formulario.type_dose === "weekly"
                     ? "Día de la Semana *"
                     : "Días de la Semana *"}
                   {(formulario.type_dose === "diary" ||
                     formulario.type_dose === "every_x_hours") && (
-                    <span className="text-sm font-normal text-muted-foreground ml-2">
+                    <span className="block sm:inline text-xs sm:text-sm font-normal text-muted-foreground sm:ml-2 mt-1 sm:mt-0">
                       (Seleccionados automáticamente)
                     </span>
                   )}
                   {formulario.type_dose === "weekly" && (
-                    <span className="text-sm font-normal text-muted-foreground ml-2">
+                    <span className="block sm:inline text-xs sm:text-sm font-normal text-muted-foreground sm:ml-2 mt-1 sm:mt-0">
                       (Selecciona solo un día)
                     </span>
                   )}
                 </label>
-                <div className="flex flex-wrap gap-3">
+                <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-2 sm:gap-3">
                   {diasSemana.map((dia) => (
                     <button
                       key={dia.id}
@@ -792,7 +792,7 @@ export default function RecordatoriosPage() {
                         formulario.type_dose === "diary" ||
                         formulario.type_dose === "every_x_hours"
                       }
-                      className={`px-6 py-3 rounded-xl text-lg font-semibold transition-all duration-300 ${
+                      className={`px-3 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 ${
                         formulario.day_week.includes(dia.id)
                           ? "bg-accent text-accent-foreground shadow-md"
                           : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -821,7 +821,7 @@ export default function RecordatoriosPage() {
                   )}
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   type="submit"
                   disabled={
@@ -832,7 +832,7 @@ export default function RecordatoriosPage() {
                       !formulario.interval_hour) ||
                     !formulario.type_dose
                   }
-                  className="flex-1 bg-accent text-accent-foreground px-6 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 bg-accent text-accent-foreground px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:bg-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <>
@@ -862,7 +862,7 @@ export default function RecordatoriosPage() {
                       interval_hour: "",
                     });
                   }}
-                  className="flex-1 bg-muted text-muted-foreground px-6 py-4 rounded-xl text-lg font-semibold hover:bg-muted/80 transition-all duration-300"
+                  className="flex-1 bg-muted text-muted-foreground px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:bg-muted/80 transition-all duration-300"
                 >
                   Cancelar
                 </button>
@@ -874,12 +874,12 @@ export default function RecordatoriosPage() {
         {/* Lista de Recordatorios */}
         <div className="space-y-4">
           {recordatorios.length === 0 ? (
-            <div className="bg-card border-2 border-dashed border-border rounded-2xl p-12 text-center">
-              <Bell className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-xl text-muted-foreground">
+            <div className="bg-card border-2 border-dashed border-border rounded-2xl p-8 sm:p-12 text-center">
+              <Bell className="w-12 h-12 sm:w-16 sm:h-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-lg sm:text-xl text-muted-foreground">
                 No hay recordatorios configurados aún
               </p>
-              <p className="text-lg text-muted-foreground mt-2">
+              <p className="text-base sm:text-lg text-muted-foreground mt-2">
                 Haz clic en "Nuevo Recordatorio" para comenzar
               </p>
             </div>
@@ -887,15 +887,15 @@ export default function RecordatoriosPage() {
             recordatorios.map((recordatorio) => (
               <div
                 key={recordatorio._id}
-                className={`bg-card border-2 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 ${
+                className={`bg-card border-2 rounded-2xl p-4 sm:p-6 shadow-md hover:shadow-lg transition-all duration-300 ${
                   recordatorio.treatment_status
                     ? "border-accent"
                     : "border-border opacity-60"
                 }`}
               >
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-0">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                       <div
                         className={`p-2 rounded-lg ${
                           recordatorio.treatment_status
@@ -904,7 +904,7 @@ export default function RecordatoriosPage() {
                         }`}
                       >
                         <Bell
-                          className={`w-6 h-6 ${
+                          className={`w-5 h-5 sm:w-6 sm:h-6 ${
                             recordatorio.treatment_status
                               ? "text-accent"
                               : "text-muted-foreground"
@@ -912,27 +912,27 @@ export default function RecordatoriosPage() {
                         />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold text-foreground">
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground break-words">
                           {getMedicationName(
                             recordatorio.medicationId,
                             medicamentos
                           )}
                         </h3>
-                        <p className="text-lg text-muted-foreground flex items-center gap-2">
-                          <Clock className="w-4 h-4" />
+                        <p className="text-sm sm:text-base md:text-lg text-muted-foreground flex items-center gap-2">
+                          <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                           {recordatorio.startHour}
                         </p>
                       </div>
                     </div>
 
-                    <div className="ml-11">
+                    <div className="sm:ml-11">
                       <div className="flex flex-wrap gap-2">
                         {recordatorio.day_week.map((diaId) => {
                           const dia = diasSemana.find((d) => d.id === diaId);
                           return (
                             <span
                               key={diaId}
-                              className="px-3 py-1 bg-accent/10 text-accent rounded-lg text-sm font-semibold"
+                              className="px-2 sm:px-3 py-1 bg-accent/10 text-accent rounded-lg text-xs sm:text-sm font-semibold"
                             >
                               {dia?.nombre}
                             </span>
@@ -942,10 +942,10 @@ export default function RecordatoriosPage() {
                     </div>
                   </div>
 
-                  <div className="flex gap-2 ml-4">
+                  <div className="flex gap-2 sm:ml-4">
                     <button
                       onClick={() => toggleActivo(recordatorio._id)}
-                      className={`px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      className={`px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 ${
                         recordatorio.treatment_status
                           ? "bg-accent text-accent-foreground"
                           : "bg-muted text-muted-foreground"
@@ -955,17 +955,17 @@ export default function RecordatoriosPage() {
                     </button>
                     <button
                       onClick={() => handleEditar(recordatorio)}
-                      className="bg-secondary text-secondary-foreground p-3 rounded-lg hover:bg-secondary/80 transition-all duration-300"
+                      className="bg-secondary text-secondary-foreground p-2 sm:p-3 rounded-lg hover:bg-secondary/80 transition-all duration-300"
                       aria-label="Editar recordatorio"
                     >
-                      <Edit2 className="w-5 h-5" />
+                      <Edit2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(recordatorio)}
-                      className="bg-destructive/10 text-destructive p-3 rounded-lg hover:bg-destructive/20 transition-all duration-300"
+                      className="bg-destructive/10 text-destructive p-2 sm:p-3 rounded-lg hover:bg-destructive/20 transition-all duration-300"
                       aria-label="Eliminar recordatorio"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
                 </div>
