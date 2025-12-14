@@ -193,27 +193,27 @@ export default function MedicamentosPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/10">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-4 text-lg"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-4 text-base sm:text-lg"
           >
-            <ArrowLeft className="w-6 h-6" />
+            <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
             Volver al inicio
           </Link>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="bg-primary/10 p-4 rounded-2xl">
-                <Pill className="w-10 h-10 text-primary" />
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="bg-primary/10 p-3 sm:p-4 rounded-2xl">
+                <Pill className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-foreground">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
                   Mis Medicamentos
                 </h1>
-                <p className="text-xl text-muted-foreground mt-1">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground mt-1">
                   Gestiona tu lista de medicamentos
                 </p>
               </div>
@@ -222,9 +222,9 @@ export default function MedicamentosPage() {
             {!mostrarFormulario && (
               <button
                 onClick={handleNuevo}
-                className="bg-primary text-primary-foreground px-6 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+                className="w-full sm:w-auto bg-primary text-primary-foreground px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:bg-primary/90 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
               >
-                <Plus className="w-6 h-6" />
+                <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                 Agregar Medicamento
               </button>
             )}
@@ -233,16 +233,16 @@ export default function MedicamentosPage() {
 
         {/* Formulario */}
         {mostrarFormulario && (
-          <div className="bg-card border-2 border-border rounded-2xl p-8 mb-8 shadow-lg">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
+          <div className="bg-card border-2 border-border rounded-2xl p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 shadow-lg">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6">
               {editando ? "Editar Medicamento" : "Nuevo Medicamento"}
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div>
                 <label
                   htmlFor="nombre"
-                  className="block text-lg font-semibold text-foreground mb-2"
+                  className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                 >
                   Nombre del Medicamento *
                 </label>
@@ -254,14 +254,14 @@ export default function MedicamentosPage() {
                   onChange={(e) =>
                     setFormulario({ ...formulario, name: e.target.value })
                   }
-                  className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-background text-foreground"
+                  className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-background text-foreground"
                   placeholder="Ej: Aspirina"
                 />
               </div>
               <div>
                 <label
                   htmlFor="expiration_date"
-                  className="block text-lg font-semibold text-foreground mb-2"
+                  className="block text-base sm:text-lg font-semibold text-foreground mb-2"
                 >
                   Fecha de Vencimiento *
                 </label>
@@ -276,7 +276,7 @@ export default function MedicamentosPage() {
                       expiration_date: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-4 text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-background text-foreground"
+                  className="w-full px-3 py-3 sm:px-4 sm:py-4 text-base sm:text-lg border-2 border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-background text-foreground"
                 />
               </div>
 
@@ -346,10 +346,10 @@ export default function MedicamentosPage() {
                 />
               </div> */}
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-primary text-primary-foreground px-6 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary text-primary-foreground px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   disabled={loading}
                 >
                   {loading ? (
@@ -371,7 +371,7 @@ export default function MedicamentosPage() {
                       expiration_date: "",
                     });
                   }}
-                  className="flex-1 bg-muted text-muted-foreground px-6 py-4 rounded-xl text-lg font-semibold hover:bg-muted/80 transition-all duration-300"
+                  className="flex-1 bg-muted text-muted-foreground px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:bg-muted/80 transition-all duration-300"
                 >
                   Cancelar
                 </button>
@@ -394,8 +394,8 @@ export default function MedicamentosPage() {
             </div>
           ) : (
             <>
-              {/* Instrucciones de drag and drop */}
-              <div className="bg-accent/10 border border-accent/30 rounded-xl p-4 mb-4">
+              {/* Instrucciones de drag and drop - Solo en desktop */}
+              <div className="hidden md:block bg-accent/10 border border-accent/30 rounded-xl p-4 mb-4">
                 <p className="text-sm text-foreground">
                   <span className="font-semibold">💡 Tip:</span> Arrastra cualquier medicina al botón 
                   "Crear Recordatorios" para crear un recordatorio automáticamente
@@ -411,51 +411,47 @@ export default function MedicamentosPage() {
                 className={getDraggableClasses(
                   draggedMedicine,
                   medicamento,
-                  "bg-card border-2 border-border rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+                  "bg-card border-2 border-border rounded-2xl p-4 sm:p-6 shadow-md hover:shadow-lg transition-all duration-300"
                 )}
               >
-                <div className="flex items-start justify-between">
-                  {/* Drag Handle Indicator */}
-                  <div className="flex items-center mr-2 text-muted-foreground/50 hover:text-muted-foreground transition-colors">
-                    <GripVertical className="w-6 h-6" />
-                  </div>
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-0">
+                  <div className="flex items-start flex-1">
+                    {/* Drag Handle Indicator - Solo en desktop */}
+                    <div className="hidden md:flex items-center mr-2 text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+                      <GripVertical className="w-6 h-6" />
+                    </div>
 
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="bg-primary/10 p-2 rounded-lg">
-                        <Pill className="w-6 h-6 text-primary" />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                        <div className="bg-primary/10 p-2 rounded-lg">
+                          <Pill className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                        </div>
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground break-words">
+                          {medicamento.name}
+                        </h3>
                       </div>
-                      <h3 className="text-2xl font-bold text-foreground">
-                        {medicamento.name}
-                      </h3>
-                    </div>
 
-                    <div className="space-y-2 ml-11">
-                      <p className="text-lg text-foreground">
-                        <span className="font-semibold">
-                          Fecha de vencimiento:
-                        </span>{" "}
-                        {formattedDate(medicamento.expiration_date)}
-                      </p>
+                      <div className="space-y-1 sm:space-y-2 sm:ml-11">
+                        <p className="text-sm sm:text-base md:text-lg text-foreground">
+                          <span className="font-semibold">
+                            Fecha de vencimiento:
+                          </span>{" "}
+                          {formattedDate(medicamento.expiration_date)}
+                        </p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex gap-2 ml-4">
+                  <div className="flex gap-2 sm:ml-4">
                     <button
                       onClick={() => handleEditar(medicamento)}
                       onMouseDown={(e) => e.stopPropagation()}
-                      className="bg-secondary text-secondary-foreground p-3 rounded-lg hover:bg-secondary/80 transition-all duration-300"
+                      className="flex-1 sm:flex-initial bg-secondary text-secondary-foreground px-4 py-2 sm:p-3 rounded-lg hover:bg-secondary/80 transition-all duration-300 flex items-center justify-center gap-2"
                       aria-label="Editar medicamento"
                     >
-                      <Edit2 className="w-5 h-5" />
+                      <Edit2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="text-sm sm:text-base font-medium">Editar</span>
                     </button>
-                    {/* <button
-                      onClick={() => handleEliminar(medicamento._id)}
-                      className="bg-destructive/10 text-destructive p-3 rounded-lg hover:bg-destructive/20 transition-all duration-300"
-                      aria-label="Eliminar medicamento"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button> */}
                   </div>
                 </div>
               </div>
@@ -466,29 +462,30 @@ export default function MedicamentosPage() {
 
         {/* Link a Recordatorios con Drop Zone */}
         {medicamentos.length > 0 && (
-          <div className="mt-8 text-center">
+          <div className="mt-6 sm:mt-8 text-center">
             <div
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               className={getDropZoneClasses(
                 isDraggingOver,
-                "inline-block transition-all duration-300",
-                "inline-block transition-all duration-300 scale-110"
+                "block sm:inline-block transition-all duration-300",
+                "block sm:inline-block transition-all duration-300 scale-110"
               )}
             >
               <button
                 onClick={() => handleGoToReminders()}
                 className={getDropZoneClasses(
                   isDraggingOver,
-                  "inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl",
-                  "inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ring-4 ring-primary/50 scale-105"
+                  "w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:bg-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl",
+                  "w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ring-4 ring-primary/50 scale-105"
                 )}
               >
                 {isDraggingOver ? (
                   <>
-                    <Plus className="w-6 h-6 animate-pulse" />
-                    Suelta aquí para crear recordatorio
+                    <Plus className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
+                    <span className="hidden sm:inline">Suelta aquí para crear recordatorio</span>
+                    <span className="sm:hidden">Suelta para crear</span>
                   </>
                 ) : (
                   <>Crear Recordatorios</>
@@ -496,7 +493,7 @@ export default function MedicamentosPage() {
               </button>
             </div>
             {draggedMedicine && (
-              <p className="text-sm text-muted-foreground mt-4 animate-pulse">
+              <p className="hidden md:block text-sm text-muted-foreground mt-4 animate-pulse">
                 Arrastra "{draggedMedicine.name}" al botón para crear un recordatorio
               </p>
             )}
