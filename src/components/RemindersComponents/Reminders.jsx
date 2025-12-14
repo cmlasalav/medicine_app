@@ -32,6 +32,7 @@ import {
 } from "../../api/Treatment";
 import DeleteConfirmationModal from "../Modals/ConfirmationModal";
 import NotificationsPreferenceModal from "../Modals/NotificationsPreferenceModal";
+import ProductionInfoModal from "../Modals/ProductionInfoModal";
 
 const diasSemana = [
   { id: "lun", nombre: "Lun" },
@@ -56,6 +57,7 @@ export default function RecordatoriosPage() {
   const [reminderToDelete, setReminderToDelete] = useState(null);
   const [deletingReminder, setDeletingReminder] = useState(false);
   const [showPreferenceModal, setShowPreferenceModal] = useState(false);
+  const [showProductionInfo, setShowProductionInfo] = useState(false);
   const [userData, setUserData] = useState(null);
   const [formulario, setFormulario] = useState({
     medicationId: "",
@@ -491,6 +493,41 @@ export default function RecordatoriosPage() {
                   Nuevo Recordatorio
                 </button>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Banner Informativo de Producción */}
+        <div className="mb-6 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-4 shadow-md">
+          <div className="flex items-start gap-3">
+            <div className="bg-amber-500 p-2 rounded-lg flex-shrink-0">
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm sm:text-base font-bold text-amber-900 mb-1">
+                ℹ️ Información Importante sobre Notificaciones
+              </h3>
+              <p className="text-xs sm:text-sm text-amber-800 mb-2">
+                Este es un prototipo educativo. Las notificaciones por WhatsApp y correo electrónico tienen limitaciones en producción.
+              </p>
+              <button
+                onClick={() => setShowProductionInfo(true)}
+                className="text-xs sm:text-sm font-semibold text-amber-700 hover:text-amber-900 underline underline-offset-2 transition-colors"
+              >
+                Ver detalles completos →
+              </button>
             </div>
           </div>
         </div>
@@ -995,6 +1032,12 @@ export default function RecordatoriosPage() {
           onPreferenceUpdated={handlePreferenceUpdated}
           setIsAuthenticated={setIsAuthenticated}
           router={router}
+        />
+
+        {/* Production Information Modal */}
+        <ProductionInfoModal
+          isOpen={showProductionInfo}
+          onClose={() => setShowProductionInfo(false)}
         />
       </div>
     </div>
