@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import LoadingScreen from "../components/Extra/Loader";
 import Head from "next/head";
 
+const basePath = process.env.NODE_ENV === "production" ? "/medicine_app" : "";
+
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -54,7 +56,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>Pastillero Virtual</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href={`${basePath}/favicon.ico`} />
       </Head>
       <AuthProvider>
         <ToastProvider />
