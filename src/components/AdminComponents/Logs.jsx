@@ -75,7 +75,7 @@ export default function LogsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-full mx-auto">
         {/* Botón de retroceso */}
         <button
           onClick={() => router.push("/dashboard")}
@@ -180,22 +180,22 @@ export default function LogsPage() {
 
           {/* Vista de Tabla para Desktop */}
           <div className="hidden lg:block overflow-x-auto">
-            <table className="w-full table-auto">
+            <table className="w-full table-fixed">
               <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
                 <tr>
-                  <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-32">
+                  <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{width: '12%'}}>
                     Fecha
                   </th>
-                  <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-48">
+                  <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{width: '18%'}}>
                     Usuario
                   </th>
-                  <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider min-w-[280px]">
+                  <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{width: '20%'}}>
                     Acción
                   </th>
-                  <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{width: '38%'}}>
                     Descripción
                   </th>
-                  <th className="px-4 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-40">
+                  <th className="px-4 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider" style={{width: '12%'}}>
                     Acciones
                   </th>
                 </tr>
@@ -229,25 +229,25 @@ export default function LogsPage() {
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <div className="flex items-center">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold mr-3 shadow-md flex-shrink-0">
+                      <div className="flex items-center overflow-hidden">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold mr-2 shadow-md flex-shrink-0">
                           {log.userId?.toString().substring(0, 2).toUpperCase() || 'UN'}
                         </div>
-                        <span className="text-sm font-medium text-gray-900 break-words" title={log.userId}>
+                        <span className="text-sm font-medium text-gray-900 truncate" title={log.userId}>
                           {log.userId}
                         </span>
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <div className="flex items-center space-x-3 min-w-max">
+                      <div className="flex items-center space-x-2 overflow-hidden">
                         {getMethodBadge(log.action) ? (
                           <>
-                            <span className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-bold border ${getMethodBadge(log.action).color} flex-shrink-0`}>
+                            <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold border ${getMethodBadge(log.action).color} flex-shrink-0`}>
                               {getMethodBadge(log.action).method}
                             </span>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-1.5">
                               <svg
-                                className="w-4 h-4 text-gray-400 flex-shrink-0"
+                                className="w-3.5 h-3.5 text-gray-400 flex-shrink-0"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -259,7 +259,7 @@ export default function LogsPage() {
                                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                                 />
                               </svg>
-                              <span className="text-sm text-gray-600">
+                              <span className="text-sm text-gray-600 truncate">
                                 {log.action.replace(/^(GET|POST|PUT|PATCH|DELETE)_?/i, '')}
                               </span>
                             </div>
@@ -277,17 +277,17 @@ export default function LogsPage() {
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <p className="text-sm text-gray-600" title={log.description}>
+                      <p className="text-sm text-gray-600 truncate" title={log.description}>
                         {log.description}
                       </p>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-center">
+                    <td className="px-2 py-4 whitespace-nowrap text-center">
                       <button
                         onClick={() => handleViewDetails(log)}
-                        className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105"
+                        className="inline-flex items-center justify-center px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                       >
                         <svg
-                          className="w-4 h-4 mr-1.5"
+                          className="w-4 h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -305,7 +305,6 @@ export default function LogsPage() {
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                           />
                         </svg>
-                        Ver detalles
                       </button>
                     </td>
                   </tr>
